@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sentiment Analysis</title>
+</head>
+<body>
+    <h1>Sentiment Analysis</h1>
+    <form id="sentiment-form">
+        <label for="query">Enter your query:</label>
+        <input type="text" id="query" name="query" required>
+        <button type="button" onclick="predictSentiment()">Predict</button>
+    </form>
+    <div id="output"></div>
+
+    <script>
+        async function predictSentiment() {
+            const query = document.getElementById('query').value;
+            const url = `http://127.0.0.1:5000/predict?query=${encodeURIComponent(query)}`;
+
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+
+                // Display prediction and confidence
+                const outputDiv = document.getElementById('output');
+                outputDiv.innerHTML = `
+                    <p>Prediction: <strong>${data.prediction}</strong></p>
+                    <p>Confidence: ${data.confidence}</p>
+                `;
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        }
+    </script>
+</body>
+</html>
